@@ -5,8 +5,8 @@ import csv
 import io
 
 # TODO: 1.1 Get your environment variables 
-yourkey = "ac63b34e"
-bot_id = "5640611318:AAF-vLXSjkCRTYatcy2BbT5tkJ3GrDMiLkY"
+api_key = "**"
+bot_id = "**"
 
 bot = telebot.TeleBot(bot_id)
 
@@ -42,7 +42,7 @@ def getMovie(message):
     movieName = message.text.replace('/movie ', "")
 
     bot.reply_to(message, 'Getting movie info...')
-    api_url = f"http://www.omdbapi.com/?i=tt3896198&apikey=83726313{movieName}"
+    api_url = f"http://www.omdbapi.com/?apikey={api_key}&t={movieName}"
     movie = requests.get(api_url).json()
 
     poster_url = movie['Poster']
