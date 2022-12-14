@@ -1,0 +1,1 @@
+I installed the extension for .net in visual studio code and then it was simple to debug. And I also pasted the ip host entry address given to use in the example.

@@ -1,0 +1,36 @@
+fn main() {
+    use scraper::{Html,selector};
+    let response = reqwest::blocking::get( "https://crypto.com/price",
+    )
+    .unwrap()
+    .text()
+    .unwrap();
+    let document=Html::parse_document(&response);
+    let crypto_selector=scraper::selector::parse("tr.css-1cxc880").unwrap();
+    let crypto_name_selector=scraper::selector::parse("p.chakra-text css-rkws3").unwrap();
+    let crypto_price_selector=scraper::selector::parse("td.css-1vyy4qg").unwrap();
+    let crypto_24hchange_selector=scraper::selector::parse("td.css-1b7j986").unwrap();
+    let crypto_24hvolume_selector=scraper::selector::parse("td.css-1nh9lk8").unwrap();
+    let crypto_marketcap_selector=scraper::selector::parse("td.css-1nh9lk8").unwrap();
+    let mut wtr=csv::Writer::from_path("crypto.csv").unwrap();
+    wtr.write_record(&["Crypto Name","Price","24H Change","24H Volume","Market Cap"]).unwrap();
+    for element in document.select((&crypto_selector)){
+        let crypto_name_element=element.select(&crypto_selecor).next().expect('crypto name');
+        let crypto_name=crypto_name_element.text().collect::<string>();
+
+        let crypto_price_element = element.select(&crypto_price_selector).next().expect("could not select crypto price")
+        let crypto_price = crypto_price_element.text().collect::<string>();
+
+        let crypto_24hchange_element = element.select(&crypto_24hchange_selector).next().expect("could not select 24hchange")
+        let crypto_24hchange = crypto_24hchange_element.text().collect::<string>();
+
+        let crypto_24hvolume_element = element.select(&crypto_24hvolume_selector).next().expect("could not select 24hvolume")
+        let crypto_24hvolume = crypto_24hvolume_element.text().collect::<string>();
+
+        let crypto_marketcap_element = element.select(&crypto_marketcap_selector).next().expect("could not select marketcap")
+        let crypto_marketcap = crypto_marketcap_element.text().collect::<string>();
+
+        wtr.write_record([&crypto_name,&crypto_price,&crypto_24hchange,&crypto_24hvolume,&crypto_marketcap]).expect("could not create selector.");
+    wtr.flush().expect("could not close file")
+    println!("done");
+}
